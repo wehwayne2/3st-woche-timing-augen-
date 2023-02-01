@@ -71,6 +71,8 @@ while 1:
                     frame2[i[0], i[1], 1] = 95
                     frame2[i[0], i[1], 2] = 36
 
+                cv2.namedWindow('animation.mp4', cv2.WND_PROP_FULLSCREEN)
+                cv2.setWindowProperty('animation.mp4', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
                 # play the new video
                 cv2.imshow('animation.mp4', frame2)
                 # cv2.imshow('animation.mp4', frame2)
