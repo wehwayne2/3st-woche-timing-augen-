@@ -59,17 +59,21 @@ while 1:
                 my_sound.set_volume(1.0)
 
         else:
-                _, frame2 = cap2.read()
-                # Convert BGR to HSV
+                # hsv is better to recognize color, convert the BGR frame to HSV
                 hsv = cv2.cvtColor(frame2, cv2.COLOR_BGR2HSV)
-                # define range of blue color in HSV
-                lower_blue = np.array([110, 50, 50])
-                upper_blue = np.array([130, 255, 255])
-                # Threshold the HSV image to get only blue colors
-                mask = cv2.inRange(hsv, lower_blue, upper_blue)
-                # Bitwise-AND mask and original image
-                res = cv2.bitwise_and(frame2, frame2, mask=mask)
-                cv2.imshow('animation.mp4', res)
+                # in hsv red color located in two region. Create the mask for red color
+                # mask the red color and get an grayscale output where red is white
+                # everything else are black
+                mask = cv2.inRange(hsv, (0, 0, 0), (255, 255, 255))
+                # get the index of the white areas and make them orange in the main frame
+                for i in zip(*np.where(mask == 255)):
+                    frame2[i[0], i[1], 0] = 202
+                    frame2[i[0], i[1], 1] = 95
+                    frame2[i[0], i[1], 2] = 36
+
+                # play the new video
+                cv2.imshow('animation.mp4', frame2)
+                # cv2.imshow('animation.mp4', frame2)
                 waitkey = cv2.waitKey(1)
                 print('no face!!!')
                 my_sound.set_volume(0.0)
