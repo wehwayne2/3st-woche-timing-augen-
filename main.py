@@ -51,8 +51,8 @@ while 1:
                 # es fehlt noch: wenn man absichtlich lang zeit augen zumacht, loop play the video, (nicht notwendig)
                 # es fehlt noch: if (cap.isOpened()== False): print("Es gibt Fehler, error opening file") (nicht notwendig)
             else:
-                frame2_tmp = cv2.normalize(frame2, None, alpha=0, beta=255)  # ich mache meine animation ganz dunkel,
-                cv2.imshow('animation.mp4', frame2_tmp)
+                frame2 = cv2.normalize(frame2, None, alpha=0, beta=255)  # ich mache meine animation ganz dunkel,
+                cv2.imshow('animation.mp4', frame2)
                 waitkey = cv2.waitKey(1)
                 print('augen sind auf!!!')
                 my_sound.play()
@@ -79,6 +79,16 @@ while 1:
                 waitkey = cv2.waitKey(1)
                 print('no face!!!')
                 my_sound.set_volume(0.0)
+
+        # meine loesung ist unlogisch
+        # while cap2.isOpened():
+        #     cv2.imshow('animation.mp4', frame2)
+        # else:
+        #     print('no video')
+        #     cap2.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        #     continue
+        # cv2.waitKey(1)
+
 
         if waitkey == ord('w') or waitkey == ord('W'):
             cap2.release()
