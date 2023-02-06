@@ -38,9 +38,6 @@ while 1:
         )
         # print("Found {0} faces!".format(len(faces)))
         if len(faces) > 0:
-            # Draw a rectangle around the faces
-            for (x, y, w, h) in faces:
-                cv2.rectangle(img1, (x, y), (x + w, y + h), (0, 255, 0), 2)
             frame1 = frame1[faces[0][1]:faces[0][1] + faces[0][3], faces[0][0]:faces[0][0] + faces[0][2]:1]
             eyes = eyeCascade.detectMultiScale(
                 frame1,
