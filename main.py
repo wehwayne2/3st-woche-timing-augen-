@@ -7,22 +7,24 @@ eyeCascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
 
 cap1 = cv2.VideoCapture(0)
 cap2 = cv2.VideoCapture('animation.mp4')
-
 pygame.mixer.init()
 my_sound = pygame.mixer.Sound('hhhfff.mp3')
+
 frame2_counter = 0
+
+cv2.namedWindow('animation.mp4', cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty('animation.mp4', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 while 1:
     ret1, img1 = cap1.read()  # kamera
     ret2, frame2 = cap2.read()  # meine animation mp4 file
 
     frame2_counter += 1
-        # If the last frame is reached, reset the capture and the frame_counter
+    # If the last frame is reached, reset the capture and the frame_counter
     if frame2_counter == cap2.get(cv2.CAP_PROP_FRAME_COUNT):
         frame2_counter = 0  # Or whatever as long as it is the same as next line
         cap2.set(cv2.CAP_PROP_POS_FRAMES, 0)
         waitkey = cv2.waitKey(1)
-
 
     if ret1:
         frame1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
@@ -39,7 +41,6 @@ while 1:
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
                 cv2.rectangle(img1, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            frame1_tmp = img1[faces[0][1]:faces[0][1] + faces[0][3], faces[0][0]:faces[0][0] + faces[0][2]:1, :]
             frame1 = frame1[faces[0][1]:faces[0][1] + faces[0][3], faces[0][0]:faces[0][0] + faces[0][2]:1]
             eyes = eyeCascade.detectMultiScale(
                 frame1,
@@ -49,8 +50,6 @@ while 1:
                 # flags = cv2.CV_HAAR_SCALE_IMAGE
             )  # “Closed-Eye-Detection-with-opencv" aus github gekopiert
             # https://github.com/GangYuanFan/Closed-Eye-Detection-with-opencv/blob/master/cv_close_eye_detect.py
-
-
             if len(eyes) == 0:
                 # frame2_tmp = cv2.cvtColor(frame2, cv2.COLOR_BGR2RGB)
                 cv2.imshow('animation.mp4', frame2)
@@ -68,41 +67,26 @@ while 1:
                 my_sound.set_volume(1.0)
 
         else:
-                # hsv is better to recognize color, convert the BGR frame to HSV
-                hsv = cv2.cvtColor(frame2, cv2.COLOR_BGR2HSV)
-                # in hsv red color located in two region. Create the mask for red color
-                # mask the red color and get an grayscale output where red is white
-                # everything else are black
-                mask = cv2.inRange(hsv, (0, 0, 0), (255, 255, 255))
-                # get the index of the white areas and make them orange in the main frame
-                for i in zip(*np.where(mask == 255)):
-                    frame2[i[0], i[1], 0] = 202
-                    frame2[i[0], i[1], 1] = 95
-                    frame2[i[0], i[1], 2] = 36
+            # hsv is better to recognize color, convert the BGR frame to HSV
+            hsv = cv2.cvtColor(frame2, cv2.COLOR_BGR2HSV)
+            # in hsv red color located in two region. Create the mask for red color
+            # mask the red color and get an grayscale output where red is white
+            # everything else are black
+            mask = cv2.inRange(hsv, (0, 0, 0), (255, 255, 255))
+            # get the index of the white areas and make them orange in the main frame
+            for i in zip(*np.where(mask == 255)):
+                frame2[i[0], i[1], 0] = 202
+                frame2[i[0], i[1], 1] = 95
+                frame2[i[0], i[1], 2] = 36
 
-                cv2.namedWindow('animation.mp4', cv2.WND_PROP_FULLSCREEN)
-                cv2.setWindowProperty('animation.mp4', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-                # play the new video
-                cv2.imshow('animation.mp4', frame2)
-                # cv2.imshow('animation.mp4', frame2)
-                waitkey = cv2.waitKey(1)
-                print('no face!!!')
-                my_sound.set_volume(0.0)
-
-        # meine loesung ist unlogisch
-        # while cap2.isOpened():
-        #     cv2.imshow('animation.mp4', frame2)
-        # else:
-        #     print('no video')
-        #     cap2.set(cv2.CAP_PROP_POS_FRAMES, 0)
-        #     continue
-        # cv2.waitKey(1)
-
+            # play the new video
+            cv2.imshow('animation.mp4', frame2)
+            # cv2.imshow('animation.mp4', frame2)
+            waitkey = cv2.waitKey(1)
+            print('no face!!!')
+            my_sound.set_volume(0.0)
 
         if waitkey == ord('w') or waitkey == ord('W'):
             cap2.release()
             cv2.destroyAllWindows()
             break
-
-
-
