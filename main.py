@@ -10,10 +10,19 @@ cap2 = cv2.VideoCapture('animation.mp4')
 
 pygame.mixer.init()
 my_sound = pygame.mixer.Sound('hhhfff.mp3')
+frame2_counter = 0
 
 while 1:
     ret1, img1 = cap1.read()  # kamera
     ret2, frame2 = cap2.read()  # meine animation mp4 file
+
+    frame2_counter += 1
+        # If the last frame is reached, reset the capture and the frame_counter
+    if frame2_counter == cap2.get(cv2.CAP_PROP_FRAME_COUNT):
+        frame2_counter = 0  # Or whatever as long as it is the same as next line
+        cap2.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        waitkey = cv2.waitKey(1)
+
 
     if ret1:
         frame1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
@@ -94,3 +103,6 @@ while 1:
             cap2.release()
             cv2.destroyAllWindows()
             break
+
+
+
