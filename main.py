@@ -52,7 +52,7 @@ while 1:
                 cv2.imshow('animation.mp4', frame2)
                 waitkey = cv2.waitKey(1)
                 print('augen sind zu!!!')
-                my_sound.set_volume(0.0)
+                pygame.mixer.pause()
                 # es fehlt noch: wenn man absichtlich lang zeit augen zumacht, loop play the video, (nicht notwendig)
                 # es fehlt noch: if (cap.isOpened()== False): print("Es gibt Fehler, error opening file") (nicht notwendig)
             else:
@@ -61,7 +61,7 @@ while 1:
                 waitkey = cv2.waitKey(1)
                 print('augen sind auf!!!')
                 my_sound.play()
-                my_sound.set_volume(1.0)
+                pygame.mixer.unpause()
 
         else:
             # hsv is better to recognize color, convert the BGR frame to HSV
@@ -81,7 +81,7 @@ while 1:
             # cv2.imshow('animation.mp4', frame2)
             waitkey = cv2.waitKey(1)
             print('no face!!!')
-            my_sound.set_volume(0.0)
+            pygame.mixer.pause()
 
         if waitkey == ord('w') or waitkey == ord('W'):
             cap2.release()
