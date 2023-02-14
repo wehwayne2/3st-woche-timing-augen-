@@ -12,7 +12,7 @@ my_sound = pygame.mixer.Sound('hhhfff.mp3')
 
 frame2_counter = 0
 
-cv2.namedWindow('animation.mp4', cv2.WND_PROP_FULLSCREEN)
+cv2.namedWindow('animation.mp4', cv2.WINDOW_FREERATIO)
 cv2.setWindowProperty('animation.mp4', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 while 1:
@@ -41,8 +41,8 @@ while 1:
             frame1 = frame1[faces[0][1]:faces[0][1] + faces[0][3], faces[0][0]:faces[0][0] + faces[0][2]:1]
             eyes = eyeCascade.detectMultiScale(
                 frame1,
-                scaleFactor=1.1,
-                minNeighbors=5,
+                scaleFactor=1.3,
+                minNeighbors=6,
                 minSize=(30, 30),
                 # flags = cv2.CV_HAAR_SCALE_IMAGE
             )  # “Closed-Eye-Detection-with-opencv" aus github gekopiert
@@ -51,17 +51,17 @@ while 1:
                 # frame2_tmp = cv2.cvtColor(frame2, cv2.COLOR_BGR2RGB)
                 cv2.imshow('animation.mp4', frame2)
                 waitkey = cv2.waitKey(1)
-                print('augen sind zu!!!')
-                my_sound.set_volume(0.0)
+                #print('augen sind zu!!!')
+                pygame.mixer.pause()
                 # es fehlt noch: wenn man absichtlich lang zeit augen zumacht, loop play the video, (nicht notwendig)
                 # es fehlt noch: if (cap.isOpened()== False): print("Es gibt Fehler, error opening file") (nicht notwendig)
             else:
                 frame2 = cv2.normalize(frame2, None, alpha=0, beta=255)  # ich mache meine animation ganz dunkel,
                 cv2.imshow('animation.mp4', frame2)
                 waitkey = cv2.waitKey(1)
-                print('augen sind auf!!!')
+                #print('augen sind auf!!!')
                 my_sound.play()
-                my_sound.set_volume(1.0)
+                pygame.mixer.unpause()
 
         else:
             # hsv is better to recognize color, convert the BGR frame to HSV
@@ -80,8 +80,8 @@ while 1:
             cv2.imshow('animation.mp4', frame2)
             # cv2.imshow('animation.mp4', frame2)
             waitkey = cv2.waitKey(1)
-            print('no face!!!')
-            my_sound.set_volume(0.0)
+            #print('no face!!!')
+            pygame.mixer.pause()
 
         if waitkey == ord('w') or waitkey == ord('W'):
             cap2.release()
